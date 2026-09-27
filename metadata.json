@@ -1,0 +1,6 @@
+{
+  "name": "Payfrica Journal",
+  "description": "Stories, ideas, and insights shaping Africa's digital economy. The official editorial publication of Payfrica.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
