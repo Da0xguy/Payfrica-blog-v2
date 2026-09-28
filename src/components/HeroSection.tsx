@@ -62,14 +62,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         
         {/* Center Hero Content */}
         <div className="text-center max-w-3xl mx-auto mb-10 sm:mb-14">
-          
-          {/* Eyebrow Pill establishing the Blog / Editorial identity */}
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white border border-neutral-200/90 shadow-sm text-xs font-mono font-medium text-neutral-700 mb-6">
-            <span className="w-2 h-2 rounded-full bg-[#C84323] animate-pulse" />
-            <span className="uppercase tracking-wider font-semibold text-[#C84323]">The Payfrica Blog</span>
-            <span className="text-neutral-300">·</span>
-            <span className="text-neutral-500">Stories & Financial Rails</span>
-          </div>
 
           {/* Punchy Headline matching the design screenshot */}
           <h1 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-[62px] font-extrabold text-[#111215] tracking-tight leading-[1.08] mb-5">

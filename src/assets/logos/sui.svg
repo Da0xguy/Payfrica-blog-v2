@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150" width="150" height="150">
-  <circle cx="75" cy="75" r="73" fill="none" stroke="#D8EFF8" stroke-width="3.5" />
-  <circle cx="75" cy="75" r="70" fill="#1BA4DE" />
-  <!-- Sui droplet shape -->
-  <path d="M 75 29 C 75 29 43 65 43 91 C 43 108 57 122 75 122 C 93 122 107 108 107 91 C 107 65 75 29 75 29 Z" fill="none" stroke="#FFFFFF" stroke-width="7.5" stroke-linejoin="round" />
-  <!-- S curve divider -->
-  <path d="M 75 35 C 75 54 51 72 51 91 C 51 104 62 114 75 114 C 88 114 99 104 99 91 C 99 77 87 66 75 51" fill="none" stroke="#FFFFFF" stroke-width="7.5" stroke-linecap="round" />
-</svg>
