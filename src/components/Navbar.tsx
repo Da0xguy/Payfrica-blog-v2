@@ -34,11 +34,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
           to="/" 
           className="group flex items-center gap-2.5 font-display text-base sm:text-lg font-bold tracking-tight text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C84323] rounded-full shrink-0"
         >
-          <PayfricaLogo size={24} className="transition-transform duration-300 group-hover:scale-105" />
-          <span className="font-semibold tracking-tight text-white text-base">Payfrica</span>
-          <span className="text-[10px] font-mono uppercase bg-[#C84323]/25 text-[#FF7A59] border border-[#C84323]/35 px-2 py-0.5 rounded-full font-medium tracking-wider">
-            Blog
-          </span>
+          <PayfricaLogo size={32} className="transition-transform duration-300 group-hover:scale-105" />
+          <span className="font-semibold tracking-tight text-white text-base">Payfrica Blog</span>
+          
         </Link>
 
         {/* Center Nav Links: Editorial Blog Categories */}
