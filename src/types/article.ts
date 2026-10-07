@@ -13,9 +13,13 @@ export const CATEGORIES = [
 export type CategoryType = (typeof CATEGORIES)[number];
 
 export interface Author {
+  id: string;
   name: string;
   role: string;
-  avatar: string;
+  avatar?: string;
+  bio?: string;
+  twitter?: string;
+  linkedin?: string;
 }
 
 export interface ArticleSection {
@@ -32,10 +36,12 @@ export interface Article {
   id: string;
   slug: string;
   title: string;
-  subtitle: string;
+  subtitle?: string;
   excerpt: string;
+  content: string;
   category: Exclude<CategoryType, 'All'>;
   author: Author;
+  authorId: string;
   date: string;
   readTime: string;
   image: string;
@@ -46,5 +52,17 @@ export interface Article {
   isGuide?: boolean;
   isAfricaBuilding?: boolean;
   tags: string[];
-  sections: ArticleSection[];
+  sections?: ArticleSection[];
+  views?: number;
+  claps?: number;
+  isPublished?: boolean;
+}
+
+export interface Category {
+  id: string;
+  name: string;
+  slug: string;
+  color: string;
+  textColor: string;
+  description: string;
 }

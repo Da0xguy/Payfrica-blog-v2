@@ -1,0 +1,136 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Post {
+  id            String    @id @default(cuid())
+  title         String
+  slug          String    @unique
+  excerpt       String
+  content       String    @db.Text
+  coverImage    String?
+  category      Category  @relation(fields: [categoryId], references: [id])
+  categoryId    String
+  author        Author    @relation(fields: [authorId], references: [id])
+  authorId      String
+  date          DateTime  @default(now())
+  readTime      String
+  tags          String[]
+  views         Int       @default(0)
+  claps         Int       @default(0)
+  isFeatured    Boolean   @default(false)
+  isPublished   Boolean   @default(false)
+  scheduledDate DateTime?
+  comments      Comment[]
+
+  @@index([categoryId])
+  @@index([authorId])
+  @@index([slug])
+}
+
+model Author {
+  id       String  @id @default(cuid())
+  name     String  @unique
+  avatar   String?
+  role     String
+  bio      String  @db.Text
+  twitter  String?
+  linkedin String?
+  posts    Post[]
+
+  @@index([name])
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  color       String
+  textColor   String
+  description String   @db.Text
+  posts       Post[]
+
+  @@index([slug])
+}
+
+model Comment {
+  id         String    @id @default(cuid())
+  authorName String
+  authorEmail String
+  content    String    @db.Text
+  date       DateTime  @default(now())
+  postId     String
+  post       Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  parentId   String?
+  parent     Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies    Comment[] @relation("CommentReplies")
+
+  @@index([postId])
+  @@index([parentId])
+}
+
+model NewsletterSubscriber {
+  id    String   @id @default(cuid())
+  email String   @unique
+  date  DateTime @default(now())
+
+  @@index([email])
+}
+
+model User {
+  id                  String                @id @default(cuid())
+  email               String                @unique
+  password            String
+  role                String                @default("admin")
+  isEmailVerified     Boolean               @default(false)
+  emailVerificationToken EmailVerificationToken?
+  passwordResetTokens PasswordResetToken[]
+  refreshTokens       RefreshToken[]
+
+  @@index([email])
+}
+
+model EmailVerificationToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([token])
+  @@index([userId])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([token])
+  @@index([userId])
+}
+
+model RefreshToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([token])
+  @@index([userId])
+}

@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Mail, CheckCircle2, ArrowRight, Sparkles } from 'lucide-react';
+import { newsletterApi } from '../api';
 
 export const Newsletter: React.FC = () => {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !email.includes('@') || !email.includes('.')) {
       setStatus('error');
@@ -15,16 +16,14 @@ export const Newsletter: React.FC = () => {
     }
 
     setStatus('loading');
-    setTimeout(() => {
+    try {
+      await newsletterApi.subscribe(email);
       setStatus('success');
-      try {
-        const subscribers = JSON.parse(localStorage.getItem('payfrica_subscribers') || '[]');
-        subscribers.push({ email, timestamp: new Date().toISOString() });
-        localStorage.setItem('payfrica_subscribers', JSON.stringify(subscribers));
-      } catch {
-        // Fallback for privacy environments
-      }
-    }, 600);
+      setEmail('');
+    } catch (err) {
+      setStatus('error');
+      setErrorMessage('Failed to subscribe. Please try again.');
+    }
   };
 
   return (

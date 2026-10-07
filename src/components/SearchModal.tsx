@@ -8,12 +8,14 @@ interface SearchModalProps {
   isOpen: boolean;
   onClose: () => void;
   articles: Article[];
+  loading?: boolean;
 }
 
 export const SearchModal: React.FC<SearchModalProps> = ({
   isOpen,
   onClose,
   articles,
+  loading = false,
 }) => {
   const [query, setQuery] = useState('');
   const [recentSearches, setRecentSearches] = useState<string[]>([
@@ -123,7 +125,14 @@ export const SearchModal: React.FC<SearchModalProps> = ({
 
         {/* Results / Default state */}
         <div className="max-h-[60vh] overflow-y-auto p-4 sm:p-6 divide-y divide-white/5">
-          {query ? (
+          {loading ? (
+            <div className="py-12 text-center">
+              <div className="animate-pulse">
+                <div className="h-6 bg-white/10 rounded w-48 mx-auto mb-4"></div>
+                <div className="h-4 bg-white/10 rounded w-32 mx-auto"></div>
+              </div>
+            </div>
+          ) : query ? (
             <div>
               <div className="flex items-center justify-between text-xs text-neutral-400 mb-3 font-mono">
                 <span>RESULTS ({filteredArticles.length})</span>
