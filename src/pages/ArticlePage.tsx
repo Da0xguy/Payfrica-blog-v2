@@ -11,19 +11,37 @@ import {
   ArrowUpRight,
   BookOpen
 } from 'lucide-react';
-import { ARTICLES } from '../data/articles';
+import { postsApi } from '../api';
 import { ArticleCard } from '../components/ArticleCard';
 import { Newsletter } from '../components/Newsletter';
 import { ImageWithFallback } from '../components/ImageWithFallback';
 import { PayfricaLogo, SuiLogo, UsdcLogo, UsdsuiLogo, NairaLogo, BaseLogo, AvalancheLogo } from '../components/Logos';
+import { Article } from '../types/article';
 
 export const ArticlePage: React.FC = () => {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [scrollProgress, setScrollProgress] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [article, setArticle] = useState<Article | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const article = ARTICLES.find((a) => a.slug === slug);
+  useEffect(() => {
+    const fetchArticle = async () => {
+      if (!slug) return;
+      try {
+        const data = await postsApi.getBySlug(slug);
+        setArticle(data);
+      } catch (err) {
+        console.error('Failed to fetch article:', err);
+        setError('Failed to load article');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchArticle();
+  }, [slug]);
 
   // Track reading progress
   useEffect(() => {
@@ -47,7 +65,18 @@ export const ArticlePage: React.FC = () => {
     }
   }, [article]);
 
-  if (!article) {
+  if (loading) {
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center px-4 text-center">
+        <div className="animate-pulse">
+          <div className="h-8 bg-neutral-200 rounded w-64 mx-auto mb-4"></div>
+          <div className="h-4 bg-neutral-200 rounded w-48 mx-auto"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !article) {
     return (
       <div className="min-h-[70vh] flex flex-col items-center justify-center px-4 text-center">
         <h1 className="font-display text-3xl font-bold text-neutral-900 mb-3">Article not found</h1>
@@ -65,10 +94,8 @@ export const ArticlePage: React.FC = () => {
     );
   }
 
-  // Get related articles
-  const relatedArticles = ARTICLES.filter(
-    (a) => a.id !== article.id && (a.category === article.category || a.tags.some(t => article.tags.includes(t)))
-  ).slice(0, 3);
+  // Get related articles - will need to fetch from API later
+  const relatedArticles: Article[] = [];
 
   const handleCopyLink = async () => {
     try {

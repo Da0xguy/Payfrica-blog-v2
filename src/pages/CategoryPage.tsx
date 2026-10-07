@@ -1,13 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Sparkles } from 'lucide-react';
-import { ARTICLES, CATEGORIES } from '../data/articles';
-import { CategoryType } from '../types/article';
+import { CATEGORIES } from '../data/articles';
+import { CategoryType, Article } from '../types/article';
 import { ArticleCard } from '../components/ArticleCard';
 import { Newsletter } from '../components/Newsletter';
+import { postsApi } from '../api';
 
 export const CategoryPage: React.FC = () => {
   const { category } = useParams<{ category: string }>();
+  const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
 
   // Normalize category
   const activeCategory = (CATEGORIES.find(
@@ -25,9 +28,19 @@ export const CategoryPage: React.FC = () => {
     Company: 'Behind the scenes at Team Sushi, technical roadmaps, and culture.',
   };
 
-  const filteredArticles = ARTICLES.filter(
-    (a) => a.category.toLowerCase() === activeCategory.toLowerCase()
-  );
+  useEffect(() => {
+    const fetchArticles = async () => {
+      try {
+        const data = await postsApi.getAll({ category: activeCategory });
+        setArticles(data);
+      } catch (err) {
+        console.error('Failed to fetch articles:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchArticles();
+  }, [activeCategory]);
 
   useEffect(() => {
     document.title = `${activeCategory} — Payfrica Journal`;
@@ -62,7 +75,7 @@ export const CategoryPage: React.FC = () => {
               </p>
             </div>
             <div className="font-mono text-xs text-neutral-500">
-              {filteredArticles.length} {filteredArticles.length === 1 ? 'dispatch' : 'dispatches'}
+              {articles.length} {articles.length === 1 ? 'dispatch' : 'dispatches'}
             </div>
           </div>
         </div>
@@ -70,9 +83,16 @@ export const CategoryPage: React.FC = () => {
 
       {/* Category Articles */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        {filteredArticles.length > 0 ? (
+        {loading ? (
+          <div className="text-center py-20">
+            <div className="animate-pulse">
+              <div className="h-6 bg-neutral-200 rounded w-48 mx-auto mb-4"></div>
+              <div className="h-4 bg-neutral-200 rounded w-32 mx-auto"></div>
+            </div>
+          </div>
+        ) : articles.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredArticles.map((article, idx) => (
+            {articles.map((article, idx) => (
               <ArticleCard key={article.id} article={article} variant="standard" index={idx} />
             ))}
           </div>

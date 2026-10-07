@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
-import { ARTICLES, CATEGORIES } from '../data/articles';
-import { CategoryType } from '../types/article';
+import { CATEGORIES } from '../data/articles';
+import { CategoryType, Article } from '../types/article';
 import { HeroSection } from '../components/HeroSection';
 import { TickerBar } from '../components/TickerBar';
 import { FeaturedStory } from '../components/FeaturedStory';
@@ -15,9 +15,11 @@ import { ArticleCard } from '../components/ArticleCard';
 
 interface HomePageProps {
   onOpenSearch?: () => void;
+  articles?: Article[];
+  loading?: boolean;
 }
 
-export const HomePage: React.FC<HomePageProps> = ({ onOpenSearch }) => {
+export const HomePage: React.FC<HomePageProps> = ({ onOpenSearch, articles = [], loading = false }) => {
   const [selectedCategory, setSelectedCategory] = useState<CategoryType>('All');
   const storiesRef = useRef<HTMLDivElement>(null);
 
@@ -36,24 +38,24 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenSearch }) => {
   // Pre-calculate category counts
   const articleCounts = CATEGORIES.reduce((acc, cat) => {
     if (cat === 'All') {
-      acc[cat] = ARTICLES.length;
+      acc[cat] = articles.length;
     } else {
-      acc[cat] = ARTICLES.filter((a) => a.category.toLowerCase() === cat.toLowerCase()).length;
+      acc[cat] = articles.filter((a) => a.category.toLowerCase() === cat.toLowerCase()).length;
     }
     return acc;
   }, {} as Record<string, number>);
 
   // Find featured and editor's pick
-  const featuredArticle = ARTICLES.find((a) => a.featured) || ARTICLES[0];
-  const editorsPickArticle = ARTICLES.find((a) => a.editorsPick) || ARTICLES[1];
+  const featuredArticle = articles.find((a) => a.featured) || articles[0];
+  const editorsPickArticle = articles.find((a) => a.editorsPick) || articles[1];
 
   // Articles for category filtering
   const filteredArticles = selectedCategory === 'All'
-    ? ARTICLES
-    : ARTICLES.filter((a) => a.category.toLowerCase() === selectedCategory.toLowerCase());
+    ? articles
+    : articles.filter((a) => a.category.toLowerCase() === selectedCategory.toLowerCase());
 
   // Non-featured articles for the asymmetric grid when 'All' is active
-  const gridArticles = ARTICLES.filter((a) => a.id !== featuredArticle.id && a.id !== editorsPickArticle.id);
+  const gridArticles = articles.filter((a) => a.id !== featuredArticle?.id && a.id !== editorsPickArticle?.id);
 
   return (
     <div className="min-h-screen bg-[#F8F9FA] text-[#111215]">
@@ -68,7 +70,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenSearch }) => {
       <TickerBar />
 
       {/* 3. Featured Lead Editorial Story */}
-      <FeaturedStory article={featuredArticle} />
+      {featuredArticle && <FeaturedStory article={featuredArticle} />}
 
       {/* 4. Interactive Category Filter Bar */}
       <div ref={storiesRef}>
@@ -86,16 +88,16 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenSearch }) => {
           <EditorialGrid articles={gridArticles.slice(0, 7)} />
 
           {/* Editor's Pick High-Contrast Panel */}
-          <EditorsPick article={editorsPickArticle} />
+          {editorsPickArticle && <EditorsPick article={editorsPickArticle} />}
 
           {/* Guides Learning Hub */}
-          <GuidesHub articles={ARTICLES} />
+          <GuidesHub articles={articles} />
 
           {/* Africa Is Building Section */}
-          <AfricaBuilding articles={ARTICLES} />
+          <AfricaBuilding articles={articles} />
 
           {/* Latest from Payfrica Journal List */}
-          <LatestStories articles={ARTICLES} />
+          <LatestStories articles={articles} />
         </>
       ) : (
         /* Filtered Category View */
