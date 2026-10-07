@@ -242,17 +242,63 @@ export const ArticlePage: React.FC = () => {
           <div className="lg:col-span-8 max-w-[720px] mx-auto lg:mx-0">
             {/* Sections */}
             <div className="space-y-10 text-neutral-700 text-base sm:text-lg leading-[1.8]">
-              {article.sections.map((section, sIdx) => (
-                <section key={sIdx} id={`section-${sIdx}`} className="scroll-mt-24">
-                  {section.heading && (
-                    <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#111215] tracking-tight mt-10 mb-4 pt-4 border-t border-neutral-200">
-                      {section.heading}
-                    </h2>
-                  )}
+              {article.sections && article.sections.length > 0 ? (
+                article.sections.map((section, sIdx) => (
+                  <section key={sIdx} id={`section-${sIdx}`} className="scroll-mt-24">
+                    {section.heading && (
+                      <h2 className="font-display text-2xl sm:text-3xl font-bold text-[#111215] tracking-tight mt-10 mb-4 pt-4 border-t border-neutral-200">
+                        {section.heading}
+                      </h2>
+                    )}
 
-                  {section.content.map((paragraph, pIdx) => {
-                    const isFirst = sIdx === 0 && pIdx === 0;
+                    {section.content.map((paragraph, pIdx) => {
+                      const isFirst = sIdx === 0 && pIdx === 0;
 
+                      if (isFirst) {
+                        const firstLetter = paragraph.charAt(0);
+                        const restOfText = paragraph.slice(1);
+                        return (
+                          <p key={pIdx} className="mb-6 font-normal">
+                            <span className="float-left text-5xl font-display font-extrabold text-[#C84323] mr-3 mt-1 leading-none">
+                              {firstLetter}
+                            </span>
+                            {restOfText}
+                          </p>
+                        );
+                      }
+
+                      return (
+                        <p key={pIdx} className="mb-6 font-normal">
+                          {paragraph}
+                        </p>
+                      );
+                    })}
+
+                    {/* Pull Quote */}
+                    {section.pullQuote && (
+                      <figure className="my-8 py-6 px-6 sm:px-8 rounded-2xl bg-neutral-100/90 border-l-4 border-[#C84323] text-neutral-900 font-display text-lg sm:text-xl font-medium italic leading-snug">
+                        "{section.pullQuote}"
+                      </figure>
+                    )}
+
+                    {/* Callout box */}
+                    {section.callout && (
+                      <div className="my-8 p-6 rounded-2xl bg-white border border-neutral-200 shadow-sm">
+                        <div className="flex items-center gap-2 text-xs font-mono text-[#C84323] uppercase font-semibold mb-2">
+                          <BookOpen className="w-4 h-4" />
+                          <span>{section.callout.title}</span>
+                        </div>
+                        <p className="text-sm sm:text-base text-neutral-600 leading-relaxed font-sans">
+                          {section.callout.description}
+                        </p>
+                      </div>
+                    )}
+                  </section>
+                ))
+              ) : (
+                <div className="prose prose-lg max-w-none">
+                  {article.content.split('\n\n').map((paragraph, pIdx) => {
+                    const isFirst = pIdx === 0;
                     if (isFirst) {
                       const firstLetter = paragraph.charAt(0);
                       const restOfText = paragraph.slice(1);
@@ -265,48 +311,31 @@ export const ArticlePage: React.FC = () => {
                         </p>
                       );
                     }
-
                     return (
                       <p key={pIdx} className="mb-6 font-normal">
                         {paragraph}
                       </p>
                     );
                   })}
-
-                  {/* Pull Quote */}
-                  {section.pullQuote && (
-                    <figure className="my-8 py-6 px-6 sm:px-8 rounded-2xl bg-neutral-100/90 border-l-4 border-[#C84323] text-neutral-900 font-display text-lg sm:text-xl font-medium italic leading-snug">
-                      "{section.pullQuote}"
-                    </figure>
-                  )}
-
-                  {/* Callout box */}
-                  {section.callout && (
-                    <div className="my-8 p-6 rounded-2xl bg-white border border-neutral-200 shadow-sm">
-                      <div className="flex items-center gap-2 text-xs font-mono text-[#C84323] uppercase font-semibold mb-2">
-                        <BookOpen className="w-4 h-4" />
-                        <span>{section.callout.title}</span>
-                      </div>
-                      <p className="text-sm sm:text-base text-neutral-600 leading-relaxed font-sans">
-                        {section.callout.description}
-                      </p>
-                    </div>
-                  )}
-                </section>
-              ))}
+                </div>
+              )}
             </div>
 
             {/* Tags Strip */}
             <div className="mt-12 pt-8 border-t border-neutral-200 flex flex-wrap items-center gap-2">
               <span className="text-xs font-mono text-neutral-500 mr-2">TOPICS:</span>
-              {article.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="px-3 py-1 rounded-full text-xs font-medium bg-neutral-100 border border-neutral-200 text-neutral-700"
-                >
-                  #{tag}
-                </span>
-              ))}
+              {article.tags && article.tags.length > 0 ? (
+                article.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="px-3 py-1 rounded-full text-xs font-medium bg-neutral-100 border border-neutral-200 text-neutral-700"
+                  >
+                    #{tag}
+                  </span>
+                ))
+              ) : (
+                <span className="text-xs text-neutral-400">No topics</span>
+              )}
             </div>
 
             {/* Payfrica CTA Callout */}
@@ -335,24 +364,26 @@ export const ArticlePage: React.FC = () => {
           <aside className="hidden lg:block lg:col-span-4 pl-4">
             <div className="sticky top-28 space-y-8">
               {/* Table of Contents */}
-              <div className="p-6 rounded-2xl bg-white border border-neutral-200/90 shadow-sm">
-                <h4 className="font-mono text-xs uppercase tracking-wider text-neutral-800 mb-4 font-semibold">
-                  On this page
-                </h4>
-                <nav className="space-y-2 text-xs">
-                  {article.sections
-                    .filter((s) => s.heading)
-                    .map((s, idx) => (
-                      <a
-                        key={idx}
-                        href={`#section-${idx}`}
-                        className="block text-neutral-500 hover:text-[#C84323] transition-colors py-1 pl-2 border-l border-neutral-200 hover:border-[#C84323] leading-normal"
-                      >
-                        {s.heading}
-                      </a>
-                    ))}
-                </nav>
-              </div>
+              {article.sections && article.sections.length > 0 && (
+                <div className="p-6 rounded-2xl bg-white border border-neutral-200/90 shadow-sm">
+                  <h4 className="font-mono text-xs uppercase tracking-wider text-neutral-800 mb-4 font-semibold">
+                    On this page
+                  </h4>
+                  <nav className="space-y-2 text-xs">
+                    {article.sections
+                      .filter((s) => s.heading)
+                      .map((s, idx) => (
+                        <a
+                          key={idx}
+                          href={`#section-${idx}`}
+                          className="block text-neutral-500 hover:text-[#C84323] transition-colors py-1 pl-2 border-l border-neutral-200 hover:border-[#C84323] leading-normal"
+                        >
+                          {s.heading}
+                        </a>
+                      ))}
+                  </nav>
+                </div>
+              )}
 
               {/* Payfrica Product Card with Official Logo */}
               <div className="p-6 rounded-2xl bg-[#111215] text-white border border-white/10 shadow-lg">
