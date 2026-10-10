@@ -91,7 +91,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               >
                 <Search className="w-4 h-4 text-neutral-500" />
                 <span>Search Articles</span>
-                <kbd className="hidden sm:inline text-[10px] font-mono bg-neutral-100 px-1.5 py-0.5 rounded text-neutral-500 border border-neutral-200">⌘K</kbd>
               </button>
             )}
           </div>
@@ -140,7 +139,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <div className="relative z-10 p-6 sm:p-7 h-full flex flex-col justify-between">
               <div>
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-[11px] font-mono font-medium text-white mb-3">
-                  <Sparkles className="w-3 h-3 text-amber-300" />
                   <span>Featured Lead · 8 min</span>
                 </div>
                 <h3 className="font-display text-2xl sm:text-3xl font-extrabold text-white leading-tight">
@@ -180,8 +178,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             <div className="relative z-10 p-6 sm:p-7 h-full flex flex-col justify-between">
               <div>
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/20 backdrop-blur-md text-[11px] font-mono font-medium text-white mb-2">
-                  <BookOpen className="w-3 h-3 text-cyan-300" />
-                  <span>Practical Guide · 5 min</span>
+                    <span>Practical Guide · 5 min</span>
                 </div>
                 <div className="font-display text-4xl sm:text-5xl font-extrabold text-white tracking-tight">
                   10X

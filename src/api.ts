@@ -1,12 +1,16 @@
-const API_BASE_URL = 'http://localhost:3001';
+export const API_BASE_URL = 'http://localhost:3001';
 
 // Posts API
 export const postsApi = {
-  getAll: async (filters?: { category?: string; author?: string; tag?: string }) => {
+  getAll: async (filters?: { category?: string; author?: string; tag?: string; isPublished?: boolean; page?: number; limit?: number; search?: string }) => {
     const params = new URLSearchParams();
     if (filters?.category) params.append('category', filters.category);
     if (filters?.author) params.append('author', filters.author);
     if (filters?.tag) params.append('tag', filters.tag);
+    if (filters?.isPublished !== undefined) params.append('isPublished', String(filters.isPublished));
+    if (filters?.page) params.append('page', String(filters.page));
+    if (filters?.limit) params.append('limit', String(filters.limit));
+    if (filters?.search) params.append('search', filters.search);
     
     const response = await fetch(`${API_BASE_URL}/posts${params.toString() ? '?' + params.toString() : ''}`);
     if (!response.ok) throw new Error('Failed to fetch posts');
@@ -20,29 +24,36 @@ export const postsApi = {
     return response.json();
   },
 
-  create: async (postData: any) => {
+  create: async (postData: any, token?: string) => {
     const response = await fetch(`${API_BASE_URL}/posts`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
       body: JSON.stringify(postData),
     });
     if (!response.ok) throw new Error('Failed to create post');
     return response.json();
   },
 
-  update: async (id: string, postData: any) => {
+  update: async (id: string, postData: any, token?: string) => {
     const response = await fetch(`${API_BASE_URL}/posts/${id}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
       body: JSON.stringify(postData),
     });
     if (!response.ok) throw new Error('Failed to update post');
     return response.json();
   },
 
-  delete: async (id: string) => {
+  delete: async (id: string, token?: string) => {
     const response = await fetch(`${API_BASE_URL}/posts/${id}`, {
       method: 'DELETE',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
     if (!response.ok) throw new Error('Failed to delete post');
     return response.json();
@@ -56,11 +67,25 @@ export const postsApi = {
     return response.json();
   },
 
-  togglePublish: async (id: string) => {
+  togglePublish: async (id: string, token?: string) => {
     const response = await fetch(`${API_BASE_URL}/posts/${id}/publish`, {
       method: 'PATCH',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
     if (!response.ok) throw new Error('Failed to toggle publish');
+    return response.json();
+  },
+};
+
+export const uploadsApi = {
+  uploadImage: async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await fetch(`${API_BASE_URL}/uploads/image`, {
+      method: 'POST',
+      body: formData,
+    });
+    if (!response.ok) throw new Error('Failed to upload image');
     return response.json();
   },
 };

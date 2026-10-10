@@ -66,7 +66,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
             aria-label="Search"
           >
             <Search className="w-4 h-4" />
-            <span className="hidden sm:inline font-mono text-[11px] text-neutral-400">⌘K</span>
           </button>
 
           {/* Trade Now CTA Pill matching the screenshot */}
@@ -115,7 +114,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenSearch }) => {
               className="text-xs font-medium text-neutral-400 hover:text-white flex items-center gap-2 py-1 px-2"
             >
               <Search className="w-3.5 h-3.5" />
-              <span>Search articles (⌘K)</span>
+              <span>Search articles</span>
             </button>
             <a
               href="https://www.payfrica.xyz/"
