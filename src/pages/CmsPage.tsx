@@ -46,6 +46,8 @@ interface CmsCategory {
 interface CmsAuthor {
   id: string;
   name: string;
+  role?: string;
+  bio?: string;
 }
 
 interface EditorForm {
@@ -114,6 +116,10 @@ export const CmsPage = () => {
   const [saving, setSaving] = useState(false);
   const [formError, setFormError] = useState("");
   const [notice, setNotice] = useState("");
+  const [section, setSection] = useState<"stories" | "categories" | "team">("stories");
+  const [categoryDraft, setCategoryDraft] = useState({ name: "", color: "#c84323", textColor: "#ffffff", description: "" });
+  const [authorDraft, setAuthorDraft] = useState({ name: "", role: "Editor", bio: "" });
+  const [managementBusy, setManagementBusy] = useState(false);
 
   useEffect(() => {
     return () => {
@@ -352,6 +358,47 @@ export const CmsPage = () => {
     }
   };
 
+  const createCategory = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!token) return;
+    setManagementBusy(true);
+    setLoadError("");
+    try {
+      const slug = slugify(categoryDraft.name);
+      const response = await fetch(`${API_BASE_URL}/categories`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ ...categoryDraft, slug }),
+      });
+      if (!response.ok) throw new Error("Category could not be created");
+      setCategories(await categoriesApi.getAll());
+      setCategoryDraft({ name: "", color: "#c84323", textColor: "#ffffff", description: "" });
+      setNotice("Category added.");
+    } catch {
+      setLoadError("Could not add the category. Check that its name and description are valid.");
+    } finally { setManagementBusy(false); }
+  };
+
+  const createAuthor = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!token) return;
+    setManagementBusy(true);
+    setLoadError("");
+    try {
+      const response = await fetch(`${API_BASE_URL}/authors`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify(authorDraft),
+      });
+      if (!response.ok) throw new Error("Author could not be created");
+      setAuthors(await authorsApi.getAll());
+      setAuthorDraft({ name: "", role: "Editor", bio: "" });
+      setNotice("Author added.");
+    } catch {
+      setLoadError("Could not add the author. Check the details and try again.");
+    } finally { setManagementBusy(false); }
+  };
+
   if (!token) {
     return (
       <div className="min-h-screen bg-[#f1f2ed] px-5 py-12 text-[#18211e] sm:px-8">
@@ -486,10 +533,16 @@ export const CmsPage = () => {
             Workspace
           </p>
           <button
-            onClick={resetEditor}
-            className="mt-4 flex w-full items-center gap-3 border-l-2 border-[#c84323] bg-[#e9ece6] px-3 py-3 text-left text-sm font-semibold"
+            onClick={() => { setSection("stories"); resetEditor(); }}
+            className={`mt-4 flex w-full items-center gap-3 border-l-2 px-3 py-3 text-left text-sm font-semibold ${section === "stories" ? "border-[#c84323] bg-[#e9ece6]" : "border-transparent hover:bg-[#e9ece6]"}`}
           >
             <FileText className="h-4 w-4 text-[#c84323]" /> Stories
+          </button>
+          <button onClick={() => { setSection("categories"); resetEditor(); }} className={`mt-1 flex w-full items-center gap-3 border-l-2 px-3 py-3 text-left text-sm font-semibold ${section === "categories" ? "border-[#c84323] bg-[#e9ece6]" : "border-transparent hover:bg-[#e9ece6]"}`}>
+            <Plus className="h-4 w-4 text-[#c84323]" /> Categories <span className="ml-auto text-xs text-[#87918a]">{categories.length}</span>
+          </button>
+          <button onClick={() => { setSection("team"); resetEditor(); }} className={`mt-1 flex w-full items-center gap-3 border-l-2 px-3 py-3 text-left text-sm font-semibold ${section === "team" ? "border-[#c84323] bg-[#e9ece6]" : "border-transparent hover:bg-[#e9ece6]"}`}>
+            <FileText className="h-4 w-4 text-[#c84323]" /> Authors <span className="ml-auto text-xs text-[#87918a]">{authors.length}</span>
           </button>
           <div className="mt-8 border-t border-[#dce0d8] pt-5">
             <p className="px-3 font-mono text-[10px] uppercase tracking-[0.18em] text-[#87918a]">
@@ -521,6 +574,48 @@ export const CmsPage = () => {
         </aside>
 
         <main className="min-w-0 px-5 py-7 sm:px-8 sm:py-9 lg:px-11">
+          {section !== "stories" ? (
+            <>
+              <div className="border-b border-[#dce0d8] pb-6">
+                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#c84323]">Payfrica Journal / Workspace</p>
+                <h1 className="mt-2 font-display text-3xl font-semibold sm:text-4xl">{section === "categories" ? "Categories" : "Authors"}</h1>
+                <p className="mt-2 text-sm text-[#69736d]">Manage the people and topics behind your stories.</p>
+              </div>
+              {notice && <p role="status" className="mt-5 border border-[#c9ddce] bg-[#edf6ef] px-4 py-3 text-sm text-[#326545]">{notice}</p>}
+              {loadError && <p role="alert" className="mt-5 border border-[#e8c5ba] bg-[#fbefeb] px-4 py-3 text-sm text-[#a63b24]">{loadError}</p>}
+              {section === "categories" ? (
+                <div className="grid gap-8 pt-7 lg:grid-cols-[minmax(0,1fr)_340px]">
+                  <section className="divide-y divide-[#dce0d8] border-y border-[#dce0d8]">
+                    {categories.map((category) => <article key={category.slug} className="flex items-center gap-4 py-5"><span className="h-8 w-8 border border-black/10" style={{ backgroundColor: (category as CmsCategory & { color?: string }).color ?? "#c84323" }} /><div><h2 className="font-display text-lg font-semibold">{category.name}</h2><p className="mt-1 text-xs text-[#78817b]">/{category.slug}</p></div></article>)}
+                    {!categories.length && <p className="py-8 text-sm text-[#78817b]">No categories yet.</p>}
+                  </section>
+                  <form onSubmit={(event) => void createCategory(event)} className="h-fit space-y-4 border border-[#dce0d8] bg-white p-5">
+                    <h2 className="font-display text-xl font-semibold">Add a category</h2>
+                    <label className="block text-xs font-semibold">Name<input required minLength={2} value={categoryDraft.name} onChange={(event) => setCategoryDraft((item) => ({ ...item, name: event.target.value }))} className="mt-2 h-11 w-full border border-[#d5dad2] px-3 text-sm" /></label>
+                    <p className="text-xs text-[#78817b]">URL: /category/{slugify(categoryDraft.name) || "category-name"}</p>
+                    <label className="block text-xs font-semibold">Description<textarea required minLength={10} maxLength={500} value={categoryDraft.description} onChange={(event) => setCategoryDraft((item) => ({ ...item, description: event.target.value }))} rows={3} className="mt-2 w-full border border-[#d5dad2] px-3 py-2 text-sm" /></label>
+                    <div className="grid grid-cols-2 gap-3"><label className="text-xs font-semibold">Label color<input type="color" value={categoryDraft.color} onChange={(event) => setCategoryDraft((item) => ({ ...item, color: event.target.value }))} className="mt-2 h-10 w-full border border-[#d5dad2]" /></label><label className="text-xs font-semibold">Text color<input type="color" value={categoryDraft.textColor} onChange={(event) => setCategoryDraft((item) => ({ ...item, textColor: event.target.value }))} className="mt-2 h-10 w-full border border-[#d5dad2]" /></label></div>
+                    <button disabled={managementBusy} className="h-11 w-full bg-[#c84323] text-sm font-semibold text-white disabled:opacity-50">{managementBusy ? "Saving…" : "Create category"}</button>
+                  </form>
+                </div>
+              ) : (
+                <div className="grid gap-8 pt-7 lg:grid-cols-[minmax(0,1fr)_340px]">
+                  <section className="divide-y divide-[#dce0d8] border-y border-[#dce0d8]">
+                    {authors.map((author) => <article key={author.id} className="flex items-start gap-4 py-5"><span className="grid h-10 w-10 place-items-center rounded-full bg-[#e9ece6] font-display font-semibold text-[#c84323]">{author.name.slice(0, 1).toUpperCase()}</span><div><h2 className="font-display text-lg font-semibold">{author.name}</h2><p className="mt-1 text-xs font-semibold uppercase tracking-wide text-[#c84323]">{author.role || "Author"}</p><p className="mt-2 max-w-xl text-sm leading-6 text-[#78817b]">{author.bio}</p></div></article>)}
+                    {!authors.length && <p className="py-8 text-sm text-[#78817b]">No authors yet.</p>}
+                  </section>
+                  <form onSubmit={(event) => void createAuthor(event)} className="h-fit space-y-4 border border-[#dce0d8] bg-white p-5">
+                    <h2 className="font-display text-xl font-semibold">Add an author</h2>
+                    <label className="block text-xs font-semibold">Name<input required value={authorDraft.name} onChange={(event) => setAuthorDraft((item) => ({ ...item, name: event.target.value }))} className="mt-2 h-11 w-full border border-[#d5dad2] px-3 text-sm" /></label>
+                    <label className="block text-xs font-semibold">Role<input required value={authorDraft.role} onChange={(event) => setAuthorDraft((item) => ({ ...item, role: event.target.value }))} className="mt-2 h-11 w-full border border-[#d5dad2] px-3 text-sm" /></label>
+                    <label className="block text-xs font-semibold">Bio<textarea required value={authorDraft.bio} onChange={(event) => setAuthorDraft((item) => ({ ...item, bio: event.target.value }))} rows={4} className="mt-2 w-full border border-[#d5dad2] px-3 py-2 text-sm" /></label>
+                    <button disabled={managementBusy} className="h-11 w-full bg-[#c84323] text-sm font-semibold text-white disabled:opacity-50">{managementBusy ? "Saving…" : "Create author"}</button>
+                  </form>
+                </div>
+              )}
+            </>
+          ) : (
+          <>
           <div className="flex flex-wrap items-end justify-between gap-4 border-b border-[#dce0d8] pb-6">
             <div>
               <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#c84323]">
@@ -1013,6 +1108,8 @@ export const CmsPage = () => {
                 )}
               </aside>
             </form>
+          )}
+          </>
           )}
         </main>
       </div>
