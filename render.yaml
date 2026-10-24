@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: payfrica-api
+    runtime: node
+    rootDir: backend
+    buildCommand: npm ci && npx prisma generate && npm run build
+    startCommand: npx prisma migrate deploy && npm run start:prod
+    healthCheckPath: /api
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: https://payfrica-blog-v2.vercel.app
+      - key: CMS_ADMIN_EMAIL
+        sync: false
+      - key: CMS_ADMIN_PASSWORD
+        sync: false

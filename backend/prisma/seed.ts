@@ -255,19 +255,24 @@ Are you ready to optimize your corporate cross-border payments? [Sign up for a B
     console.log('✓ Posts seeded');
   }
 
-  // Create default admin user
-  const hashedPassword = await bcrypt.hash('admin123', 10);
-  await prisma.user.upsert({
-    where: { email: 'admin@payfrica.com' },
-    update: {},
-    create: {
-      email: 'admin@payfrica.com',
-      password: hashedPassword,
-      role: 'admin',
-    },
-  });
-
-  console.log('✓ Admin user seeded (email: admin@payfrica.com, password: admin123)');
+  // Create the CMS admin only from deployment-provided credentials.
+  const adminEmail = process.env.CMS_ADMIN_EMAIL;
+  const adminPassword = process.env.CMS_ADMIN_PASSWORD;
+  if (adminEmail && adminPassword) {
+    const hashedPassword = await bcrypt.hash(adminPassword, 10);
+    await prisma.user.upsert({
+      where: { email: adminEmail },
+      update: {},
+      create: {
+        email: adminEmail,
+        password: hashedPassword,
+        role: 'admin',
+      },
+    });
+    console.log(`Admin user seeded (${adminEmail})`);
+  } else {
+    console.log('CMS admin skipped; set CMS_ADMIN_EMAIL and CMS_ADMIN_PASSWORD to create it.');
+  }
 
   console.log('Database seed completed successfully!');
 }

@@ -59,17 +59,25 @@ $ npm run test:cov
 
 ## Deployment
 
-The frontend and API must both be deployed for the CMS and article data to work
-on the public site. Configure these environment variables:
+Neon hosts the Postgres database; this NestJS app is the API the frontend must
+call. A Render Blueprint is included at the repository root to deploy the API
+as a web service. Render's web service receives a public `onrender.com` URL and
+binds the app to its assigned `PORT`.
 
-- In Vercel, set `VITE_API_BASE_URL` to the public base URL of this API (for
-  example, `https://api.example.com`, with no trailing slash), then redeploy the
-  frontend. Vite embeds this value into the build.
-- In the backend deployment, set `CORS_ORIGINS` to the frontend origin, such as
-  `https://payfrica-blog-v2.vercel.app`. Multiple allowed origins can be
-  comma-separated. Keep `DATABASE_URL` configured for the production database.
+1. Push this repository to GitHub and create a Render Blueprint from it using
+   `render.yaml`.
+2. When prompted, enter the Neon Postgres connection string for `DATABASE_URL`,
+   and choose a strong CMS admin email and password. Render generates
+   `JWT_SECRET`; `CORS_ORIGINS` is set to the production Vercel site.
+3. After the service deploys, open its Shell and run `npx prisma db seed` once
+   to add the starter articles and CMS admin account.
+4. Copy the service's public URL into the Vercel project's
+   `VITE_API_BASE_URL` environment variable, then redeploy the frontend.
 
-The local defaults remain `http://localhost:3001` for the API and
+The production admin credentials are read from `CMS_ADMIN_EMAIL` and
+`CMS_ADMIN_PASSWORD`; the seed no longer creates a publicly known default
+password. Multiple frontend origins can be listed in `CORS_ORIGINS` separated
+by commas. The local defaults remain `http://localhost:3001` for the API and
 `http://localhost:3000` for the frontend.
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
