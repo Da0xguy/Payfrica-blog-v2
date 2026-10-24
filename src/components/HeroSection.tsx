@@ -64,18 +64,18 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         <div className="mx-auto mb-8 w-full max-w-3xl text-center sm:mb-14">
 
           {/* Punchy Headline matching the design screenshot */}
-          <h1 className="mb-4 font-display text-[clamp(2.15rem,8vw,3rem)] font-extrabold leading-[1.08] tracking-tight text-[#111215] [text-wrap:balance] sm:mb-5 sm:text-5xl md:text-6xl lg:text-[62px]">
+          <h1 className="hero-title-enter mb-4 font-display text-[clamp(2.15rem,8vw,3rem)] font-extrabold leading-[1.08] tracking-tight text-[#111215] [text-wrap:balance] sm:mb-5 sm:text-5xl md:text-6xl lg:text-[62px]">
             Turn digital assets <br className="hidden sm:inline" />
-            into <span className="text-[#C84323]">cash</span>, in seconds
+            into <span className="hero-highlight">cash</span>, in seconds
           </h1>
 
           {/* Subtitle connecting the landing page theme to real blog stories */}
-          <p className="mx-auto mb-6 max-w-2xl text-sm font-normal leading-relaxed text-neutral-600 sm:mb-8 sm:text-base md:text-lg">
+          <p className="hero-copy-enter mx-auto mb-6 max-w-2xl text-sm font-normal leading-relaxed text-neutral-600 sm:mb-8 sm:text-base md:text-lg">
             The official publication of Payfrica. Deep dives, market intelligence, builder guides, and research on stablecoins, cross-border payments, and Web3 finance across Nigeria, Kenya, Ghana, and Africa.
           </p>
 
           {/* Primary Action Buttons */}
-          <div className="mb-6 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
+          <div className="hero-actions-enter mb-6 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:gap-4">
             <button
               onClick={onExploreClick}
               className="inline-flex min-h-12 items-center justify-center gap-2.5 rounded-full bg-[#C84323] px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#C84323]/25 transition-all duration-200 hover:bg-[#B0381D] active:bg-[#9B2F17] sm:px-7 sm:text-base sm:hover:-translate-y-0.5"
@@ -96,7 +96,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
 
           {/* Quick Category / Topic Chips */}
-          <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
+          <div className="hero-topics-enter flex flex-wrap items-center justify-center gap-2 text-xs">
             <span className="mr-1 w-full font-mono text-neutral-400 sm:w-auto">Popular Topics:</span>
             {popularTopics.map((topic) => (
               <button
@@ -123,7 +123,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           {/* Card 1: Lead Story Link - "Any asset in. Local cash out." */}
           <Link
             to="/journal/why-stablecoins-are-becoming-more-than-a-crypto-story-in-africa"
-            className="group relative block h-[clamp(18rem,78vw,24rem)] min-w-0 overflow-hidden rounded-3xl border border-neutral-200/80 shadow-sm transition-all duration-300 hover:border-neutral-300 hover:shadow-xl sm:h-96 sm:hover:-translate-y-1"
+            className="hero-card-enter group relative block h-[clamp(18rem,78vw,24rem)] min-w-0 overflow-hidden rounded-3xl border border-neutral-200/80 shadow-sm transition-all duration-300 hover:border-neutral-300 hover:shadow-xl sm:h-96 sm:hover:-translate-y-1"
           >
             {/* Background Image: stylish warm lighting portrait */}
             <img
@@ -162,7 +162,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           {/* Card 2: 10X Guide - Speed & Settlement */}
           <Link
             to="/journal/how-to-cash-out-usdc-in-lagos-in-under-60-seconds"
-            className="group relative block h-[clamp(18rem,78vw,24rem)] min-w-0 overflow-hidden rounded-3xl border border-neutral-200/80 bg-neutral-900 shadow-sm transition-all duration-300 hover:shadow-xl sm:h-96 sm:hover:-translate-y-1"
+            className="hero-card-enter group relative block h-[clamp(18rem,78vw,24rem)] min-w-0 overflow-hidden rounded-3xl border border-neutral-200/80 bg-neutral-900 shadow-sm transition-all duration-300 hover:shadow-xl sm:h-96 sm:hover:-translate-y-1"
           >
             {/* Background Image: cyclist in speed motion */}
             <img
@@ -200,7 +200,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           {/* Card 3: Golden sphere & Official Payfrica Logo Badge */}
           <Link
             to="/journal/the-rise-of-usdsui-and-native-liquidity-in-west-africa"
-            className="group relative flex h-[clamp(18rem,78vw,24rem)] min-w-0 flex-col justify-between overflow-hidden rounded-3xl border border-amber-200/60 bg-[#FDF7E7] p-6 shadow-sm transition-all duration-300 hover:border-amber-300 hover:shadow-xl sm:h-96 sm:p-7 sm:hover:-translate-y-1"
+            className="hero-card-enter group relative flex h-[clamp(18rem,78vw,24rem)] min-w-0 flex-col justify-between overflow-hidden rounded-3xl border border-amber-200/60 bg-[#FDF7E7] p-6 shadow-sm transition-all duration-300 hover:border-amber-300 hover:shadow-xl sm:h-96 sm:p-7 sm:hover:-translate-y-1"
           >
             {/* Golden 3D Sphere / Dot Pattern Illustration */}
             <div className="absolute right-0 top-0 w-64 h-64 translate-x-12 -translate-y-8 pointer-events-none opacity-85">
@@ -270,7 +270,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         )}
 
         {/* Supported Multi-Chain Rails Strip with Official Logos */}
-        <div className="border-t border-neutral-200/90 pt-8 sm:pt-10">
+        <div className="hero-rails-enter border-t border-neutral-200/90 pt-8 sm:pt-10">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="text-xs font-mono uppercase tracking-wider text-neutral-500 font-medium">
               Covered Networks & Currencies
