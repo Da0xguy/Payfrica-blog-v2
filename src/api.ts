@@ -1,4 +1,4 @@
-export const API_BASE_URL = 'https://payfrica-blog-v2.vercel.app';
+export const API_BASE_URL = 'https://payfrica-blog-backend.onrender.com';
 
 // Posts API
 export const postsApi = {
