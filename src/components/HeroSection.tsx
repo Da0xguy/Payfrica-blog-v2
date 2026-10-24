@@ -64,9 +64,22 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         <div className="mx-auto mb-8 w-full max-w-3xl text-center sm:mb-14">
 
           {/* Punchy Headline matching the design screenshot */}
-          <h1 className="hero-title-enter mb-4 font-display text-[clamp(2.15rem,8vw,3rem)] font-extrabold leading-[1.08] tracking-tight text-[#111215] [text-wrap:balance] sm:mb-5 sm:text-5xl md:text-6xl lg:text-[62px]">
-            Turn digital assets <br className="hidden sm:inline" />
-            into <span className="hero-highlight">cash</span>, in seconds
+          <h1 className="mb-4 font-display text-[clamp(2.15rem,8vw,3rem)] font-extrabold leading-[1.08] tracking-tight text-[#111215] [text-wrap:balance] sm:mb-5 sm:text-5xl md:text-6xl lg:text-[62px]">
+            {['Turn', 'digital', 'assets'].map((word, index) => (
+              <span key={word} className="hero-word-enter mr-[0.22em] inline-block" style={{ animationDelay: `${index * 90}ms` }}>
+                {word}
+              </span>
+            ))}
+            <br className="hidden sm:inline" />
+            {['into', 'cash,', 'in', 'seconds'].map((word, index) => (
+              <span
+                key={word}
+                className="hero-word-enter mr-[0.22em] inline-block"
+                style={{ animationDelay: `${(index + 3) * 90}ms` }}
+              >
+                {word === 'cash,' ? <span className="hero-highlight">{word}</span> : word}
+              </span>
+            ))}
           </h1>
 
           {/* Subtitle connecting the landing page theme to real blog stories */}
