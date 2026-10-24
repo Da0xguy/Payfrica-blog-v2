@@ -1,4 +1,6 @@
-export const API_BASE_URL = 'http://localhost:3001';
+// Configure VITE_API_BASE_URL in the frontend environment for deployed builds.
+// The localhost fallback keeps the existing local development setup working.
+export const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:3001').replace(/\/$/, '');
 
 // Posts API
 export const postsApi = {
