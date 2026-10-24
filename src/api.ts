@@ -104,6 +104,41 @@ export const authorsApi = {
     if (!response.ok) throw new Error('Failed to fetch author');
     return response.json();
   },
+
+  create: async (authorData: any, token?: string) => {
+    const response = await fetch(`${API_BASE_URL}/authors`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify(authorData),
+    });
+    if (!response.ok) throw new Error('Failed to create author');
+    return response.json();
+  },
+
+  update: async (id: string, authorData: any, token?: string) => {
+    const response = await fetch(`${API_BASE_URL}/authors/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify(authorData),
+    });
+    if (!response.ok) throw new Error('Failed to update author');
+    return response.json();
+  },
+
+  delete: async (id: string, token?: string) => {
+    const response = await fetch(`${API_BASE_URL}/authors/${id}`, {
+      method: 'DELETE',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+    if (!response.ok) throw new Error('Failed to delete author');
+    return response.json();
+  },
 };
 
 // Categories API
@@ -118,6 +153,41 @@ export const categoriesApi = {
   getBySlug: async (slug: string) => {
     const response = await fetch(`${API_BASE_URL}/categories/${slug}`);
     if (!response.ok) throw new Error('Failed to fetch category');
+    return response.json();
+  },
+
+  create: async (categoryData: any, token?: string) => {
+    const response = await fetch(`${API_BASE_URL}/categories`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify(categoryData),
+    });
+    if (!response.ok) throw new Error('Failed to create category');
+    return response.json();
+  },
+
+  update: async (id: string, categoryData: any, token?: string) => {
+    const response = await fetch(`${API_BASE_URL}/categories/${id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+      body: JSON.stringify(categoryData),
+    });
+    if (!response.ok) throw new Error('Failed to update category');
+    return response.json();
+  },
+
+  delete: async (id: string, token?: string) => {
+    const response = await fetch(`${API_BASE_URL}/categories/${id}`, {
+      method: 'DELETE',
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    });
+    if (!response.ok) throw new Error('Failed to delete category');
     return response.json();
   },
 };
