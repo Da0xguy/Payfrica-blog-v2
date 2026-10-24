@@ -1,4 +1,6 @@
+
 export const API_BASE_URL = 'https://payfrica-blog-v2.vercel.app';
+
 
 // Posts API
 export const postsApi = {

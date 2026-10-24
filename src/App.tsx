@@ -94,7 +94,7 @@ function AppContent() {
           />
           <Route path="/journal/:slug" element={<ArticlePage />} />
           <Route path="/category/:category" element={<CategoryPage />} />
-          <Route path="/cms/*" element={<CmsPage />} />
+          <Route path="/cms" element={<CmsPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
