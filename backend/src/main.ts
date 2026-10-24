@@ -46,8 +46,13 @@ async function bootstrap() {
   // JWT tokens are sent via Authorization header, not cookies
   // If using cookie-based auth in the future, implement CSRF protection
   
+  const corsOrigins = (process.env.CORS_ORIGINS || 'http://localhost:3000')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: corsOrigins,
     credentials: true,
   });
 

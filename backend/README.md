@@ -59,6 +59,19 @@ $ npm run test:cov
 
 ## Deployment
 
+The frontend and API must both be deployed for the CMS and article data to work
+on the public site. Configure these environment variables:
+
+- In Vercel, set `VITE_API_BASE_URL` to the public base URL of this API (for
+  example, `https://api.example.com`, with no trailing slash), then redeploy the
+  frontend. Vite embeds this value into the build.
+- In the backend deployment, set `CORS_ORIGINS` to the frontend origin, such as
+  `https://payfrica-blog-v2.vercel.app`. Multiple allowed origins can be
+  comma-separated. Keep `DATABASE_URL` configured for the production database.
+
+The local defaults remain `http://localhost:3001` for the API and
+`http://localhost:3000` for the frontend.
+
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
 
 If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
