@@ -1,7 +1,19 @@
 {
   "rewrites": [
     {
-      "source": "/(.*)",
+      "source": "/cms",
+      "destination": "/"
+    },
+    {
+      "source": "/journal",
+      "destination": "/"
+    },
+    {
+      "source": "/journal/:path*",
+      "destination": "/"
+    },
+    {
+      "source": "/category/:path*",
       "destination": "/"
     }
   ]
