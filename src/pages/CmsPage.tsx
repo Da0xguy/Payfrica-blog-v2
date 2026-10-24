@@ -365,12 +365,7 @@ export const CmsPage = () => {
     setLoadError("");
     try {
       const slug = slugify(categoryDraft.name);
-      const response = await fetch(`${API_BASE_URL}/categories`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ ...categoryDraft, slug }),
-      });
-      if (!response.ok) throw new Error("Category could not be created");
+      await categoriesApi.create({ ...categoryDraft, slug }, token);
       setCategories(await categoriesApi.getAll());
       setCategoryDraft({ name: "", color: "#c84323", textColor: "#ffffff", description: "" });
       setNotice("Category added.");
@@ -385,12 +380,7 @@ export const CmsPage = () => {
     setManagementBusy(true);
     setLoadError("");
     try {
-      const response = await fetch(`${API_BASE_URL}/authors`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify(authorDraft),
-      });
-      if (!response.ok) throw new Error("Author could not be created");
+      await authorsApi.create(authorDraft, token);
       setAuthors(await authorsApi.getAll());
       setAuthorDraft({ name: "", role: "Editor", bio: "" });
       setNotice("Author added.");
