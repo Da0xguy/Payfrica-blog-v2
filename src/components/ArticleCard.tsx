@@ -17,6 +17,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   index,
 }) => {
   const formattedIndex = index !== undefined ? String(index + 1).padStart(2, '0') : null;
+  const cardNumber = formattedIndex ? `Story ${formattedIndex}` : 'Story';
 
   const getCardLogo = (category: string, tags: string[] = []) => {
     const text = (category + ' ' + tags.join(' ')).toLowerCase();
@@ -33,7 +34,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
     return (
       <Link
         to={`/journal/${article.slug}`}
-        className="group relative block bg-white hover:bg-neutral-50/70 border border-neutral-200/90 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200"
+        className="article-card article-card-wide group relative block bg-white hover:bg-neutral-50/70 border border-neutral-200/90 rounded-[1.35rem] overflow-hidden shadow-sm hover:shadow-md transition-all duration-300"
       >
         <div className="grid grid-cols-1 md:grid-cols-12 gap-0 items-center">
           <div className="md:col-span-7 p-6 sm:p-8 lg:p-10 flex flex-col justify-between h-full">
@@ -42,6 +43,7 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
               <div className="flex items-center gap-2 text-xs font-mono text-neutral-500 mb-3 tracking-wide">
                 {getCardLogo(article.category, article.tags)}
                 <span className="text-[#C84323] font-semibold uppercase">{article.category}</span>
+                <span className="ml-auto text-[10px] text-neutral-400">{cardNumber}</span>
                 <span aria-hidden="true" className="text-neutral-300">·</span>
                 <span>{article.date}</span>
                 <span aria-hidden="true" className="text-neutral-300">·</span>
@@ -118,21 +120,22 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
   return (
     <Link
       to={`/journal/${article.slug}`}
-      className="group flex flex-col bg-white hover:bg-neutral-50/70 border border-neutral-200/90 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 hover:-translate-y-0.5"
+      className={`article-card group flex flex-col bg-white hover:bg-neutral-50/70 border border-neutral-200/90 rounded-[1.35rem] overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 ${variant === 'featured' ? 'article-card-featured' : ''}`}
     >
-      <div className="relative aspect-[16/10] overflow-hidden bg-neutral-100">
+      <div className={`relative overflow-hidden bg-neutral-100 ${variant === 'featured' ? 'aspect-[16/10] lg:aspect-[16/11]' : 'aspect-[16/10]'}`}>
         <ImageWithFallback
           src={article.image || article.coverImage || ''}
           alt={article.title}
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
+        <div className="article-card-image-sheen absolute inset-0 pointer-events-none" />
         <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-mono text-neutral-800 font-semibold flex items-center gap-1.5 shadow-sm border border-neutral-200">
           {getCardLogo(article.category, article.tags)}
           <span>{article.category}</span>
         </div>
       </div>
 
-      <div className="p-5 sm:p-6 flex flex-col flex-1 justify-between">
+      <div className={`${variant === 'featured' ? 'p-5 sm:p-7' : 'p-5 sm:p-6'} flex flex-col flex-1 justify-between`}>
         <div>
           {/* Metadata */}
           <div className="flex items-center gap-2 text-xs font-mono text-neutral-500 mb-2.5">
@@ -141,7 +144,11 @@ export const ArticleCard: React.FC<ArticleCardProps> = ({
             <span>{article.readTime}</span>
           </div>
 
-          <h3 className="font-display text-lg sm:text-xl font-bold text-neutral-900 group-hover:text-[#C84323] transition-colors duration-200 leading-snug mb-3">
+          <div className="mb-2 flex items-center justify-between gap-3">
+            <span className="text-[10px] font-mono uppercase tracking-[0.16em] text-neutral-400">{cardNumber}</span>
+            <span className="h-px flex-1 bg-neutral-100" />
+          </div>
+          <h3 className={`font-display ${variant === 'featured' ? 'text-xl sm:text-2xl' : 'text-lg sm:text-xl'} font-bold text-neutral-900 group-hover:text-[#C84323] transition-colors duration-200 leading-snug mb-3`}>
             {article.title}
           </h3>
 

@@ -18,46 +18,47 @@ export const EditorialGrid: React.FC<EditorialGridProps> = ({ articles }) => {
   const item7 = articles[6];
 
   return (
-    <section className="py-10 sm:py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="flex items-center justify-between mb-8">
+    <section className="editorial-section py-10 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="editorial-heading flex items-end justify-between mb-8 sm:mb-10">
         <div>
-          <span className="text-xs font-mono uppercase tracking-widest text-[#C84323] font-semibold block mb-1">
+          <span className="text-[10px] sm:text-xs font-mono uppercase tracking-[0.22em] text-[#C84323] font-semibold block mb-2">
             Curated Architecture
           </span>
-          <h2 className="font-display text-2xl sm:text-3xl font-extrabold text-[#111215]">
+          <h2 className="font-display text-3xl sm:text-4xl font-extrabold text-[#111215]">
             Perspectives & Analysis
           </h2>
         </div>
-        <span className="text-xs font-mono text-neutral-500 hidden sm:inline-block">
-          Asymmetric Editorial Dispatch
+        <span className="editorial-heading-note text-xs font-mono text-neutral-500 hidden sm:inline-flex items-center gap-2">
+          <span className="h-px w-8 bg-[#C84323]/50" />
+          Asymmetric Dispatch
         </span>
       </div>
 
       {/* Row 1: 1 large card (7 cols) + 2 medium stacked cards (5 cols) */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-6">
+      <div className="editorial-bento-grid grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 mb-5 lg:mb-6">
         {item1 && (
-          <div className="lg:col-span-7">
-            <ArticleCard article={item1} variant="standard" />
+          <div className="editorial-bento-primary lg:col-span-7">
+            <ArticleCard article={item1} variant="featured" index={0} />
           </div>
         )}
-        <div className="lg:col-span-5 flex flex-col gap-6">
-          {item2 && <ArticleCard article={item2} variant="standard" />}
-          {item3 && <ArticleCard article={item3} variant="standard" />}
+        <div className="lg:col-span-5 flex flex-col gap-5 lg:gap-6">
+          {item2 && <ArticleCard article={item2} variant="standard" index={1} />}
+          {item3 && <ArticleCard article={item3} variant="standard" index={2} />}
         </div>
       </div>
 
       {/* Row 2: 1 full-width wide editorial story */}
       {item4 && (
-        <div className="mb-6">
-          <ArticleCard article={item4} variant="wide" />
+        <div className="editorial-wide-card mb-5 lg:mb-6">
+          <ArticleCard article={item4} variant="wide" index={3} />
         </div>
       )}
 
       {/* Row 3: 3 smaller compact cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {item5 && <ArticleCard article={item5} variant="standard" index={0} />}
-        {item6 && <ArticleCard article={item6} variant="standard" index={1} />}
-        {item7 && <ArticleCard article={item7} variant="standard" index={2} />}
+      <div className="editorial-bottom-grid grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6">
+        {item5 && <ArticleCard article={item5} variant="standard" index={4} />}
+        {item6 && <ArticleCard article={item6} variant="standard" index={5} />}
+        {item7 && <ArticleCard article={item7} variant="standard" index={6} />}
       </div>
     </section>
   );
