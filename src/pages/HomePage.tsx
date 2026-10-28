@@ -58,7 +58,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenSearch, articles = [],
   const gridArticles = articles.filter((a) => a.id !== featuredArticle?.id && a.id !== editorsPickArticle?.id);
 
   return (
-    <div className="min-h-screen w-full min-w-0 overflow-x-clip bg-[#F8F9FA] text-[#111215]">
+    <div className="landing-page min-h-screen w-full min-w-0 overflow-x-clip bg-[#F8F9FA] text-[#111215]">
       {/* 1. Blog Hero Section matching the new design language */}
       <HeroSection 
         onExploreClick={scrollToStories} 

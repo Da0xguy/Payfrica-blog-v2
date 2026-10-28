@@ -47,9 +47,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   ];
 
   return (
-    <section className="relative w-full min-w-0 overflow-hidden bg-[#F8F9FA] px-0 pt-7 pb-12 sm:pt-10 sm:pb-16 md:pt-14 md:pb-20">
+    <section className="hero-section relative w-full min-w-0 overflow-hidden bg-[#F8F9FA] px-0 pt-7 pb-12 sm:pt-10 sm:pb-16 md:pt-14 md:pb-20">
       
       {/* Background Concentric Circles matching the design reference */}
+      <div className="hero-ambient-glow hero-ambient-glow-one" aria-hidden="true" />
+      <div className="hero-ambient-glow hero-ambient-glow-two" aria-hidden="true" />
+      <div className="hero-ambient-grid" aria-hidden="true" />
       <div className="hero-concentric-rings select-none pointer-events-none">
         <div className="hero-ring hero-ring-1" />
         <div className="hero-ring hero-ring-2" />
@@ -57,6 +60,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         <div className="hero-ring hero-ring-4" />
         <div className="hero-ring hero-ring-5" />
       </div>
+      <div className="hero-orbit hero-orbit-one" aria-hidden="true" />
+      <div className="hero-orbit hero-orbit-two" aria-hidden="true" />
 
       <div className="relative z-10 mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         
